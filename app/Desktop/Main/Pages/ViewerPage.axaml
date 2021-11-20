@@ -23,7 +23,7 @@
             <Button Command="{Binding OnClickSaveViewer}" Margin="5 0 0 0">Save Viewer</Button>
         </StackPanel>
         <TextBlock Text="{Binding ExportedMessageText}" Margin="0 20 0 0" />
-        <controls:FilterPanel DataContext="{Binding FilterModel}" />
+        <controls:MessageFilterPanel DataContext="{Binding FilterModel}" />
         <Expander Header="Database Tools">
             <StackPanel Orientation="Vertical" Spacing="10">
                 <StackPanel Orientation="Vertical" Spacing="4">

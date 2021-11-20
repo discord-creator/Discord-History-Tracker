@@ -14,7 +14,7 @@ using DHT.Server.Database;
 using DHT.Utils.Models;
 
 namespace DHT.Desktop.Main.Controls {
-	sealed class FilterPanelModel : BaseModel {
+	sealed class MessageFilterPanelModel : BaseModel {
 		private static readonly HashSet<string> FilterProperties = new () {
 			nameof(FilterByDate),
 			nameof(StartDate),
@@ -90,9 +90,9 @@ namespace DHT.Desktop.Main.Controls {
 		private readonly IDatabaseFile db;
 
 		[Obsolete("Designer")]
-		public FilterPanelModel() : this(null!, DummyDatabaseFile.Instance) {}
+		public MessageFilterPanelModel() : this(null!, DummyDatabaseFile.Instance) {}
 
-		public FilterPanelModel(Window window, IDatabaseFile db) {
+		public MessageFilterPanelModel(Window window, IDatabaseFile db) {
 			this.window = window;
 			this.db = db;
 

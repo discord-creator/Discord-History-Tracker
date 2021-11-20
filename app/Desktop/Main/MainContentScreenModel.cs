@@ -62,6 +62,7 @@ namespace DHT.Desktop.Main {
 
 		public void Dispose() {
 			TrackingPageModel.Dispose();
+			AttachmentsPageModel.Dispose();
 		}
 	}
 }

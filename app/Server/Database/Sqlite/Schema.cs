@@ -6,7 +6,7 @@ using Microsoft.Data.Sqlite;
 
 namespace DHT.Server.Database.Sqlite {
 	sealed class Schema {
-		internal const int Version = 3;
+		internal const int Version = 4;
 
 		private static readonly Log Log = Log.ForType<Schema>();
 
@@ -99,9 +99,10 @@ namespace DHT.Server.Database.Sqlite {
 					emoji_name TEXT,
 					emoji_flags INTEGER NOT NULL,
 					count INTEGER NOT NULL)");
-
+			
 			CreateMessageEditTimestampTable();
 			CreateMessageRepliedToTable();
+			CreateDownloadsTable();
 
 			Execute("CREATE INDEX attachments_message_ix ON attachments(message_id)");
 			Execute("CREATE INDEX embeds_message_ix ON embeds(message_id)");
@@ -120,6 +121,13 @@ namespace DHT.Server.Database.Sqlite {
 			Execute(@"CREATE TABLE replied_to (
 			        message_id INTEGER PRIMARY KEY NOT NULL,
 			        replied_to_id INTEGER NOT NULL)");
+		}
+
+		private void CreateDownloadsTable() {
+			Execute(@"CREATE TABLE downloads (
+                      url TEXT NOT NULL PRIMARY KEY,
+                      status INTEGER NOT NULL,
+                      blob BLOB)");
 		}
 
 		private void UpgradeSchemas(int dbVersion) {
@@ -151,6 +159,11 @@ namespace DHT.Server.Database.Sqlite {
 
 				Execute("VACUUM");
 				perf.Step("Vacuum");
+			}
+
+			if (dbVersion <= 3) {
+				CreateDownloadsTable();
+				perf.Step("Upgrade to version 4");
 			}
 
 			perf.End();

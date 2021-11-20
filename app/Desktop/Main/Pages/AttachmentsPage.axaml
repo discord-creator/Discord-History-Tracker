@@ -10,5 +10,9 @@
         <pages:AttachmentsPageModel />
     </Design.DataContext>
 
-    <StackPanel Spacing="10" />
+    <StackPanel Spacing="10">
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <Button Command="{Binding OnClickToggleDownload}" Content="{Binding ToggleDownloadButtonText}" />
+        </StackPanel>
+    </StackPanel>
 </UserControl>

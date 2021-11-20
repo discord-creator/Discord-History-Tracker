@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using DHT.Server.Data;
 using DHT.Server.Data.Filters;
+using DHT.Server.Download;
 
 namespace DHT.Server.Database {
 	public sealed class DummyDatabaseFile : IDatabaseFile {
@@ -40,6 +41,12 @@ namespace DHT.Server.Database {
 		}
 
 		public void RemoveMessages(MessageFilter filter, MessageFilterRemovalMode mode) {}
+		
+		public void AddDownload(Data.Download download) {}
+		
+		public List<DownloadItem> GenerateDownloadItems() {
+			return new();
+		}
 
 		public void Dispose() {}
 	}

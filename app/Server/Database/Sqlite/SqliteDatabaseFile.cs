@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DHT.Server.Data;
 using DHT.Server.Data.Filters;
+using DHT.Server.Download;
 using DHT.Utils.Collections;
 using DHT.Utils.Logging;
 using Microsoft.Data.Sqlite;
@@ -347,6 +348,33 @@ LEFT JOIN replied_to rt ON m.message_id = rt.message_id" + filter.GenerateWhereC
 
 			UpdateMessageStatistics();
 			perf.End();
+		}
+
+		public void AddDownload(Data.Download download) {
+			using var cmd = conn.Upsert("downloads", new[] {
+				("url", SqliteType.Text),
+				("status", SqliteType.Integer),
+				("blob", SqliteType.Blob)
+			});
+			
+			cmd.Set(":url", download.Url);
+			cmd.Set(":status", download.Status);
+			cmd.Set(":blob", download.Data);
+			cmd.ExecuteNonQuery();
+		}
+
+		public List<DownloadItem> GenerateDownloadItems() {
+			var list = new List<DownloadItem>();
+			
+			using var cmd = conn.Command("SELECT DISTINCT a.url FROM attachments a WHERE a.url NOT IN (SELECT d.url FROM downloads d WHERE d.status = 200)");
+			using var reader = cmd.ExecuteReader();
+
+			while (reader.Read()) {
+				string url = reader.GetString(0);
+				list.Add(new DownloadItem(url));
+			}
+			
+			return list;
 		}
 
 		private MultiDictionary<ulong, Attachment> GetAllAttachments() {
